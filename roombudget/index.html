@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f3f6ed">
+  <meta name="description" content="RoomBudget — интерактивный планировщик комнаты. Расставляйте мебель, сравнивайте размеры и контролируйте бюджет.">
+  <title>RoomBudget — планировщик комнаты и бюджета</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="../" aria-label="К выбору прототипов"><span class="brand-mark">⌑</span><span>Room<b>Budget</b><small>Студия планировки</small></span></a>
+    <div class="header-actions">
+      <span class="prototype-label"><span></span> Живой прототип</span>
+      <button class="btn btn-quiet header-action" type="button" id="undo" title="Отменить действие" aria-label="Отменить">↶ <span>Назад</span></button>
+      <button class="btn btn-quiet header-action" type="button" id="redo" title="Повторить действие" aria-label="Повторить">↷ <span>Вперёд</span></button>
+      <button class="btn btn-dark" type="button" id="export">↧ <span>Сохранить</span></button>
+    </div>
+  </header>
+
+  <div class="intro">
+    <div>
+      <p class="eyebrow">Ваш дом. Ваши решения.</p>
+      <h1>Создайте комнату,<br><em>которая вам подходит.</em></h1>
+      <p>Передвигайте мебель, проверяйте размеры и собирайте смету в реальном времени.</p>
+    </div>
+    <div class="intro-decoration" aria-hidden="true">🛋️</div>
+  </div>
+
+  <section class="stats" aria-label="Обзор проекта">
+    <div class="stat"><span>Площадь комнаты</span><strong id="stat-area">—</strong><small id="stat-size">—</small></div>
+    <div class="stat"><span>Стоимость мебели</span><strong id="stat-total">—</strong><small id="stat-count">—</small></div>
+    <div class="stat stat-accent"><span>Остаток бюджета</span><strong id="stat-remaining">—</strong><small id="stat-percent">—</small></div>
+  </section>
+
+  <main class="main-layout">
+    <div class="workspace-col">
+      <section class="surface board-panel" aria-label="План комнаты">
+        <div class="section-title"><div><span class="eyebrow">Шаг 01 · Планировка</span><h2>Ваша комната</h2></div><span class="section-note">Вид сверху · см</span></div>
+        <div class="board-toolbar">
+          <div class="room-fields">
+            <label>Ширина, м <input type="number" id="room-width" step="0.1" min="1.5" max="15" value="4.2" inputmode="decimal"></label>
+            <span class="multiply">×</span>
+            <label>Длина, м <input type="number" id="room-height" step="0.1" min="1.5" max="15" value="3.2" inputmode="decimal"></label>
+          </div>
+          <button id="snap-toggle" class="toggle-btn active" type="button" aria-pressed="true">▦ Привязка 10 см</button>
+        </div>
+        <div class="plan-shell">
+          <div class="ruler-top" id="ruler-width">4,2 м</div>
+          <div class="room-viewport">
+            <div id="room" class="room" role="group" aria-label="План комнаты с перемещаемой мебелью">
+              <div class="window" title="Окно (условное обозначение)"></div>
+              <div class="door" title="Дверь (условное обозначение)"></div>
+              <div id="furniture-layer"></div>
+            </div>
+          </div>
+          <div class="ruler-bottom"><span id="ruler-height">3,2 м</span><span>↔ Перетащите предмет пальцем или мышью</span></div>
+        </div>
+        <div id="collision-status" class="board-status success" role="status">✓ Мебель расставлена без пересечений</div>
+        <div class="board-actions">
+          <button id="clear" class="btn btn-outline" type="button">⌫ Очистить комнату</button>
+          <button id="reset" class="btn btn-outline" type="button">↺ Пример планировки</button>
+        </div>
+      </section>
+
+      <section class="surface catalog-panel" aria-labelledby="catalog-heading">
+        <div class="section-title"><div><span class="eyebrow">Шаг 02 · Наполнение</span><h2 id="catalog-heading">Добавить мебель</h2></div><span class="section-note">Нажмите, чтобы добавить</span></div>
+        <div class="catalog" id="catalog"></div>
+      </section>
+    </div>
+
+    <aside class="sidebar">
+      <section class="surface inspector-panel" aria-labelledby="inspector-heading">
+        <div class="section-title"><div><span class="eyebrow">Шаг 03 · Настройка</span><h2 id="inspector-heading">Параметры предмета</h2></div></div>
+        <div id="inspector"></div>
+      </section>
+      <section class="surface budget-panel" aria-labelledby="budget-heading">
+        <div class="section-title"><div><span class="eyebrow">Шаг 04 · Смета</span><h2 id="budget-heading">Ваш бюджет</h2></div></div>
+        <label class="field-label" for="budget">Лимит на мебель, ₽</label>
+        <input class="text-input budget-input" type="number" id="budget" min="1000" max="100000000" step="1000" value="130000" inputmode="numeric">
+        <div class="progress"><div id="budget-bar"></div></div>
+        <div class="budget-row"><span>Израсходовано</span><b id="budget-spent">—</b></div>
+        <div class="budget-row"><span>Доступно</span><b id="budget-left">—</b></div>
+        <p id="budget-message" class="budget-message">—</p>
+        <div class="divider"></div>
+        <h3>Ваша мебель <span id="list-count"></span></h3>
+        <div id="furniture-list" class="furniture-list"></div>
+        <div class="aside-actions">
+          <button class="btn btn-dark" id="print" type="button">▤ Распечатать смету</button>
+          <label class="btn btn-outline import-btn" for="import-json">↑ Открыть проект</label>
+          <input id="import-json" type="file" accept=".json,application/json" hidden>
+        </div>
+      </section>
+    </aside>
+  </main>
+  <footer><span>RoomBudget · интерактивный прототип</span><span>Данные хранятся только в вашем браузере. Размеры, цены и расположение двери условные.</span></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
