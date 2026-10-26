@@ -78,4 +78,63 @@ render();
 </script>
 </div>
 
+
+<style id="tvoya-onboarding-css">
+#tr-demo .tour-help{border:1px solid #d9e6d8;background:#eef6e8;color:#2b5036;border-radius:10px;padding:9px 12px;font-weight:850;font-size:11px;min-height:38px;white-space:nowrap}
+#tr-demo .tour-hint{display:flex;align-items:center;gap:12px;background:#e8f3e6;border:1px solid #cfe5c9;border-radius:13px;padding:11px 13px;margin:-3px 0 13px;font-size:12px;color:#3d5c45;line-height:1.45}
+#tr-demo .tour-hint[hidden]{display:none}
+#tr-demo .tour-hint .tour-icon{font-size:22px;flex:0 0 auto}
+#tr-demo .tour-hint .tour-copy{flex:1;min-width:0}
+#tr-demo .tour-hint b{display:block;color:#244633;margin-bottom:3px}
+#tr-demo .tour-hint button{border:1px solid #c3d9bf;background:#fff;color:#34593c;border-radius:9px;min-height:38px;font-weight:850;padding:8px 12px;font-size:11px}
+#tr-demo .tour-backdrop{position:fixed;inset:0;z-index:9999;background:#0e2729df;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:max(10px,env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+#tr-demo .tour-modal{display:flex;flex-direction:column;width:min(560px,100%);max-height:calc(100dvh - 20px);background:#fff;color:#263c34;border-radius:22px;overflow:hidden;box-shadow:0 20px 75px #0005}
+#tr-demo .tour-scroll{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;flex:1;min-height:0}
+#tr-demo .tour-head{background:radial-gradient(circle at 88% 15%,#39756e,#182f36 75%);padding:22px 23px;color:#fff}
+#tr-demo .tour-eyebrow{font-size:10px;font-weight:850;letter-spacing:1.1px;color:#dafa9a}
+#tr-demo .tour-head h2{color:#fff;font-size:30px;line-height:1.1;margin:8px 0;letter-spacing:-.8px}
+#tr-demo .tour-head p{color:#d7e7df;font-size:12px;line-height:1.5}
+#tr-demo .tour-content{padding:19px 23px}
+#tr-demo .tour-content h3{font-size:14px;margin:0 0 8px;color:#213e31}
+#tr-demo .tour-content p{color:#61796a;font-size:12px;line-height:1.5;margin:0 0 16px}
+#tr-demo .tour-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#tr-demo .tour-step{display:flex;gap:9px;align-items:flex-start;background:#fafcf8;border:1px solid #e1eae1;padding:11px;border-radius:13px}
+#tr-demo .tour-step .em{font-size:24px;flex-shrink:0}
+#tr-demo .tour-step b{font-size:12px;display:block;margin-bottom:4px;color:#2a4134}
+#tr-demo .tour-step small{display:block;font-size:11px;color:#6a8072;line-height:1.4}
+#tr-demo .tour-note{margin-top:14px;padding:12px;border-radius:12px;background:#ecf4e9;color:#5c7864;font-size:11px;line-height:1.5}
+#tr-demo .tour-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:13px 23px max(14px,env(safe-area-inset-bottom,0px));border-top:1px solid #e2ebe4;background:#fff}
+#tr-demo .tour-go{flex:1 1 220px;background:#d9fa80;color:#274330;border:0;border-radius:12px;min-height:46px;font-size:13px;font-weight:900;padding:11px}
+#tr-demo .tour-skip{background:#edf2ea;color:#4f7055;border:0;border-radius:12px;min-height:46px;font-size:12px;font-weight:850;padding:11px 13px}
+#tr-demo .tour-restart{width:100%;border:0;background:transparent;text-decoration:underline;font-size:11px;color:#687d70;padding:4px}
+#tr-demo .tour-backdrop button:focus-visible{outline:3px solid #6c8dec;outline-offset:2px}
+@media(max-width:560px){#tr-demo .tour-modal{border-radius:18px}#tr-demo .tour-head{padding:18px}#tr-demo .tour-head h2{font-size:27px}#tr-demo .tour-content{padding:16px 17px}#tr-demo .tour-actions{padding:12px 17px max(12px,env(safe-area-inset-bottom,0px))}#tr-demo .tour-steps{grid-template-columns:1fr}#tr-demo .tour-step{padding:9px 11px}#tr-demo .tour-hint{align-items:flex-start}#tr-demo .tour-hint button{align-self:center}}
+</style>
+<script id="tvoya-onboarding-js">
+(()=>{
+const root=document.getElementById('tr-demo');if(!root||root.dataset.tourReady)return;root.dataset.tourReady='1';
+const toolbar=root.querySelector('.t-toolbar'),modes=root.querySelector('#tr-modes');
+const HELP_KEY='tvoya_rol_guide_seen_v1',TIP_KEY='tvoya_rol_hints_seen_v1',STATE_KEY='tvoya_rol_demo_v3_2026';
+const get=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const put=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let isOpen=get(HELP_KEY)!=='1', tips={};try{tips=JSON.parse(get(TIP_KEY)||'{}')||{}}catch(e){}
+const help=document.createElement('button');help.type='button';help.className='tour-help';help.textContent='? Инструкция';help.setAttribute('aria-label','Как пользоваться прототипом');toolbar.insertBefore(help,toolbar.querySelector('.t-reset'));
+const hint=document.createElement('div');hint.className='tour-hint';hint.hidden=true;hint.setAttribute('aria-live','polite');toolbar.insertAdjacentElement('afterend',hint);
+const mount=document.createElement('div');root.appendChild(mount);
+const guide={tv:['🖥️','ТВ — начало квеста','Нажмите «Начать групповой квест». Когда завершите три станции, вернитесь сюда для финального экрана.'],terminal:['▣','Терминал — профессиональная проба','Выберите станцию, роль и решение; пройдите демо офлайн-задачи и передайте результат ведущему.'],master:['🛡️','Ведущий — проверка результата','Выберите станцию со статусом «Ожидает проверки», отметьте три условия и подтвердите выполнение.'],mobile:['📱','Кабинет — карьерный маршрут','Посмотрите достижения, карьерный паспорт и награды; затем выберите следующую активность.']};
+const mode=()=>modes.querySelector('button.sel')?.dataset.id||'tv';
+function hasProgress(){try{const s=JSON.parse(get(STATE_KEY)||'null');return !!(s&&(s.visit!=='before'||s.completed?.length||s.xp>0||s.nextStatus!=='none'))}catch(e){return false}}
+function html(){
+return '<div class="tour-backdrop"><div class="tour-modal" role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-desc"><div class="tour-scroll"><div class="tour-head"><div class="tour-eyebrow">ПРОФЕССИИ БУДУЩЕГО · ИНТЕРАКТИВНЫЙ ПРОТОТИП</div><h2 id="tour-title">Твоя роль</h2><p>От знакомства с профессией — к осознанному выбору.</p></div><div class="tour-content"><h3>Что это?</h3><p id="tour-desc">Гибридная система профориентации: групповые квесты с реальным оборудованием, цифровой прогресс и личный карьерный кабинет. Она помогает заинтересовать школьников и мотивирует самостоятельно выбрать следующую активность.</p><h3>Как пройти демонстрацию</h3><div class="tour-steps"><div class="tour-step"><span class="em">🖥️</span><div><b>1. ТВ · Старт</b><small>Нажмите «Начать групповой квест».</small></div></div><div class="tour-step"><span class="em">▣</span><div><b>2. Терминал · Проба</b><small>Выберите станцию, роль и решение; передайте результат.</small></div></div><div class="tour-step"><span class="em">🛡️</span><div><b>3. Ведущий · Проверка</b><small>Подтвердите результат и начисление награды.</small></div></div><div class="tour-step"><span class="em">📱</span><div><b>4. Кабинет · Дальше</b><small>Изучите опыт и выберите новую активность.</small></div></div></div><div class="tour-note">Все действия демонстрационные: работа на оборудовании, награды и запись моделируются. Режимы переключаются на верхней панели. Личный смартфон для квеста не нужен.</div></div></div><div class="tour-actions"><button class="tour-go" data-tour="start">Начать демонстрацию →</button><button class="tour-skip" data-tour="skip">Пропустить</button>'+(hasProgress()?'<button class="tour-restart" data-tour="restart">↺ Начать заново — сбросить демопрогресс</button>':'')+'</div></div></div>'
+}
+function refresh(){mount.innerHTML=isOpen?html():'';const key=mode(),tip=guide[key],show=!isOpen&&!tips[key];hint.hidden=!show;hint.innerHTML=show?'<span class="tour-icon">'+tip[0]+'</span><div class="tour-copy"><b>'+tip[1]+'</b>'+tip[2]+'</div><button type="button" data-tour="tip" data-id="'+key+'">Понятно</button>':'';document.body.style.overflow=isOpen?'hidden':'';if(isOpen){const primary=mount.querySelector('.tour-go');if(primary&&document.activeElement!==primary)primary.focus({preventScroll:true})}}
+function close(start,restart){isOpen=false;put(HELP_KEY,'1');if(restart){toolbar.querySelector('.t-reset')?.click()}if(start){modes.querySelector('[data-id="tv"]')?.click()}refresh()}
+help.addEventListener('click',()=>{isOpen=true;refresh()});
+root.addEventListener('click',e=>{const btn=e.target.closest('[data-tour]');if(!btn)return;const a=btn.dataset.tour;if(a==='start')close(true,false);if(a==='skip')close(false,false);if(a==='restart')close(true,true);if(a==='tip'){tips[btn.dataset.id]=true;put(TIP_KEY,JSON.stringify(tips));refresh()}});
+document.addEventListener('keydown',e=>{if(!isOpen)return;if(e.key==='Escape'){e.preventDefault();close(false,false)}if(e.key==='Tab'){const buttons=[...mount.querySelectorAll('button:not([disabled])')];if(!buttons.length)return;if(e.shiftKey&&document.activeElement===buttons[0]){e.preventDefault();buttons[buttons.length-1].focus()}else if(!e.shiftKey&&document.activeElement===buttons[buttons.length-1]){e.preventDefault();buttons[0].focus()}}});
+new MutationObserver(()=>refresh()).observe(modes,{childList:true});
+refresh();
+})();
+</script>
+
 </body></html>
