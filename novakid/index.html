@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#eaf6ff"/>
+<meta name="description" content="Novakid Learning Adventures — интерактивный мобильный UX-прототип сказочного образовательного приключения."/>
+<title>Novakid — Learning Adventures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900;1000&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#171658;--muted:#6b75a0;--purple:#7544ee;--violet:#9c51f6;--blue:#188df8;--sun:#ffe568;--yellow:#ffd747;--orange:#ffab29;--surface:#fff;--shadow:0 11px 28px rgba(37,51,109,.16);font-family:'Nunito',system-ui,-apple-system,sans-serif;color:var(--ink)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:radial-gradient(circle at 15% 15%,#e0d7ff 0,transparent 35%),radial-gradient(circle at 85% 90%,#c9edff 0,transparent 37%),#eaf4ff;display:grid;place-items:center;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+button:focus-visible{outline:3px solid #ff8b21;outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed}
+#phone{position:relative;width:min(100vw,430px);height:min(100dvh,900px);max-height:900px;background:#f2f9ff;border-radius:35px;overflow:hidden;box-shadow:0 34px 95px rgba(30,38,87,.26),0 0 0 8px #1c2355,0 0 0 11px #5260aa}
+#app{height:100%;position:relative;overflow:hidden}
+.screen{position:absolute;inset:0;overflow:hidden;animation:appear .32s ease both}
+@keyframes appear{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.065)}}
+@keyframes shine{from{background-position:-100% 0}to{background-position:230% 0}}
+@keyframes bob{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-5px)}}
+@keyframes scaleIn{from{opacity:0;transform:translateY(25px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes micwave{0%,100%{opacity:.3;transform:scale(.9)}50%{opacity:.8;transform:scale(1.14)}}
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(16px)}}
+@keyframes sparkle{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1.3)}}
+h1,h2,h3,p{margin:0}h1,h2,h3{font-weight:1000;line-height:1.1;letter-spacing:-.035em}
+.screen-scroll{height:100%;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain}
+.screen-scroll::-webkit-scrollbar,.map-scroll::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 12px;background:white;box-shadow:0 4px 12px rgba(48,73,130,.11);font-weight:1000;white-space:nowrap}
+.counter{font-size:17px}.counter .star{font-size:25px;filter:drop-shadow(0 2px 0 #ed9b05)}
+.topbar{position:relative;z-index:4;padding:calc(14px + env(safe-area-inset-top)) 21px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-size:30px;font-weight:1000;letter-spacing:-.07em;color:#16155c;white-space:nowrap}.brand em{font-style:normal;color:#7739ed}
+.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:29px;background:linear-gradient(140deg,#a972ff,#d2bdff);border:3px solid white;box-shadow:0 4px 11px #a194d144}
+.top-actions{display:flex;align-items:center;gap:8px}
+.btn{width:100%;min-height:60px;display:flex;align-items:center;justify-content:center;gap:11px;border-radius:25px;font-size:19px;font-weight:1000;letter-spacing:-.02em;box-shadow:0 5px 0 #df9724,0 11px 17px #a2661933;transition:transform .12s,filter .12s}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #df9724}
+.btn.yellow{background:linear-gradient(180deg,#fff07b,#ffce39 80%,#ffb733);color:#4c2371;border:2px solid #fff7bd}
+.btn.purple{background:linear-gradient(170deg,#b363fd,#813df0 72%,#6e29e7);color:#fff;border:2px solid #d9b2ff;box-shadow:0 5px 0 #622bc9,0 10px 18px #6434b644}
+.btn.blue{background:linear-gradient(180deg,#4bc9ff,#1788ed);color:white;border:2px solid #b7f3ff;box-shadow:0 5px 0 #0873bf,0 10px 16px #3776bd33}
+.btn.small{min-height:47px;font-size:15px;border-radius:18px}
+.btn.ghost{background:#fff;color:#693ce6;box-shadow:none;border:2px solid #d8c8ff}
+.iconbtn{width:42px;height:42px;flex:none;border-radius:16px;background:#fffffff0;display:grid;place-items:center;font-size:22px;font-weight:1000;box-shadow:0 4px 12px #1a336a25}
+.nav{position:absolute;bottom:0;left:0;right:0;z-index:9;height:calc(73px + env(safe-area-inset-bottom));padding:10px 16px calc(7px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-around;background:#fffffff2;border-radius:25px 25px 0 0;box-shadow:0 -8px 30px #1c316329;backdrop-filter:blur(16px)}
+.nav button{height:55px;min-width:68px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;border-radius:17px;font-size:10px;font-weight:900;color:#8290ac}
+.nav button span{font-size:24px}.nav button.active{background:#ece5ff;color:#6731da}
+.home{background:linear-gradient(#d4efff,#f2f9ff 45%)}
+.home:before{content:'';position:absolute;top:0;left:-50px;width:150%;height:370px;background:radial-gradient(circle at 12% 15%,#ffffffa0 0 11%,transparent 12%),radial-gradient(circle at 65% 12%,#ffffff8c 0 9%,transparent 10%)}
+.home .home-main{padding:10px 19px 105px;position:relative}
+.greeting{font-weight:900;font-size:15px;color:#6d70ab;margin:8px 0 13px}
+.hero{position:relative;min-height:354px;border-radius:31px;overflow:hidden;background:linear-gradient(180deg,#493077dd 0%,#21175545 70%),linear-gradient(125deg,#7256c5,#6b3caa 57%,#322062);box-shadow:0 12px 22px #483d9b44;border:3px solid white}
+.hero .hero-glow{position:absolute;inset:0;background:radial-gradient(circle at 80% 29%,#ffce5588,transparent 35%),radial-gradient(circle at 10% 12%,#8b68ff44,transparent 35%)}
+.hero-content{position:relative;z-index:3;padding:25px 18px 17px;height:350px;display:flex;flex-direction:column;align-items:flex-start}
+.kicker{color:#ffecae;font-size:12px;font-weight:1000;letter-spacing:.1em;text-transform:uppercase}
+.hero-title{font-size:37px;line-height:1;max-width:210px;color:white;text-shadow:0 4px 0 #462492;letter-spacing:-.05em;margin:9px 0}
+.hero-desc{max-width:190px;color:#fef3ff;font-size:14px;font-weight:800;line-height:1.35}
+.hero-content .btn{margin-top:auto;width:245px;min-height:55px;font-size:16px}
+.hero .panda{position:absolute;z-index:2;right:-28px;top:65px;width:205px;filter:drop-shadow(0 13px 15px #170a52aa);animation:float 4s ease-in-out infinite}
+.hero-stars{position:absolute;color:#ffef7a;font-size:29px;text-shadow:0 2px #d49306;animation:sparkle 2.7s infinite;z-index:2}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:23px 3px 13px;font-size:22px}.section-title span{font-size:12px;color:#5268d5;letter-spacing:0}
+.path-cards{display:flex;gap:9px}.path-card{flex:1;min-width:0;text-align:center;padding:12px 5px 14px;border-radius:22px;background:#fff;box-shadow:0 5px 15px #4463a31c;font-weight:900;font-size:12px;position:relative}
+.path-card .art{font-size:48px;margin:7px 0}.step-bubble{height:31px;width:31px;border-radius:50%;display:grid;place-items:center;color:white;background:#298eea;font-size:19px;margin:auto}.path-card:first-child{background:#e8faef}.path-card:first-child .step-bubble{background:#2bbc66}.path-card:last-child{background:#fff1e5}.path-card:last-child .step-bubble{background:#a54bf4}
+.daily{border-radius:23px;background:linear-gradient(110deg,#e2f1ff,#cfe5ff);padding:17px;display:flex;align-items:center;gap:12px;margin:21px 0 6px;font-size:13px}.daily strong{display:block;font-size:17px}
+.map-page{background:#7bc5ec}
+.map-scroll{position:absolute;inset:0 0 calc(73px + env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.map-surface{height:1500px;min-width:100%;position:relative;overflow:hidden;background:linear-gradient(#92d7fa,#7ee2ba 26%,#5fbd76 65%,#429e65)}
+.map-art{width:100%;height:1500px;position:absolute;inset:0;pointer-events:none}
+.map-point{position:absolute;z-index:3;transform:translateX(-50%);display:flex;align-items:center;flex-direction:column;gap:0;min-width:94px;filter:drop-shadow(0 5px 3px #19542d77)}
+.map-point .building{font-size:66px;line-height:1.2;filter:drop-shadow(0 4px 1px #5c452477);transition:transform .2s}
+.map-point:active .building{transform:scale(.94)}.map-point .pin{border:4px solid #fff;background:linear-gradient(#fff29a,#ffb72d);box-shadow:0 4px 0 #a86910,0 4px 11px #33190066;color:#7c340d;border-radius:50%;min-width:54px;height:54px;display:grid;place-items:center;font-size:28px;font-weight:1000}
+.map-point.current .building{animation:float 3s ease-in-out infinite}.map-point.current .pin{animation:pulse 2s ease-in-out infinite}
+.map-point .point-label{background:#ffe6a3;border:2px solid #fff5c6;border-radius:13px;padding:6px 11px;box-shadow:0 4px #ad7123;font-weight:1000;font-size:13px;white-space:nowrap;margin-bottom:4px}
+.map-point.done .pin{background:linear-gradient(#71eeab,#10b978);color:white}.map-point.locked{opacity:.76;filter:grayscale(.28) drop-shadow(0 3px 3px #19542d66)}
+.map-hud{position:absolute;top:calc(13px + env(safe-area-inset-top));left:17px;right:17px;z-index:6;pointer-events:none}
+.map-hud .row{display:flex;justify-content:space-between;gap:7px;align-items:center}.map-hud button{pointer-events:auto}.map-hud .hud-card{pointer-events:auto;background:#fffef7f3;padding:13px 15px;border-radius:21px;box-shadow:0 6px 20px #30567d2c;margin-top:10px;max-width:270px}
+.hud-card .muted{font-size:11px;color:#7d739b;font-weight:900}.hud-card h3{font-size:17px;margin:3px 0 9px}.bar{height:10px;background:#c3d9e2;border-radius:20px;overflow:hidden}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#32cf8d,#2ec779);border-radius:20px;transition:width .5s}
+.map-bottom{position:absolute;z-index:6;bottom:calc(86px + env(safe-area-inset-bottom));left:17px;right:17px;pointer-events:none}.map-bottom>*{pointer-events:auto}
+.map-bottom .caption{margin:0 auto 10px;width:max-content;background:#ffffffe8;padding:8px 13px;border-radius:40px;font-size:12px;font-weight:1000;box-shadow:0 3px 7px #12455f32}
+.backdrop{position:absolute;inset:0;background:#130e3c8e;z-index:10;backdrop-filter:blur(3px)}
+.modal-wrap{position:absolute;inset:0;z-index:11;display:flex;align-items:end;padding:15px;padding-bottom:calc(23px + env(safe-area-inset-bottom));}
+.modal{width:100%;background:#fff;position:relative;border-radius:32px;padding:20px 21px 25px;box-shadow:0 16px 50px #0a082c69;animation:scaleIn .32s ease both;text-align:center}
+.modal .close{position:absolute;right:16px;top:15px}.modal h2{font-size:29px;margin:10px 0}.modal .btn{margin-top:19px}.modal small{color:#7983aa;font-weight:800}.modal .panda{width:150px;height:140px;display:block;margin:-67px auto 0;filter:drop-shadow(0 8px 7px #4a2d7855)}
+.shop{background:linear-gradient(180deg,#483061,#bd6d43 68%,#e9b479);overflow:hidden}
+.shop-set{position:absolute;inset:0;overflow:hidden;background:radial-gradient(circle at 58% 38%,#ffc76b75 0%,transparent 38%),repeating-linear-gradient(90deg,#773b3c0a 0px,#773b3c0a 4px,transparent 4px,transparent 66px),linear-gradient(180deg,#4f3069,#ac6a43 78%,#d6a273)}
+.shop-set:before{content:'';position:absolute;inset:70px 4% 21%;border:13px solid #6b383c;border-radius:100px 100px 15px 15px;background:linear-gradient(145deg,#6b9bc777,#f6bc6266 48%,#b87a3888);box-shadow:inset 0 0 0 8px #dca36d88,0 12px 25px #3d263b5c}
+.awning{position:absolute;top:58px;left:-5%;width:110%;height:60px;z-index:1;background:repeating-linear-gradient(90deg,#f1d19c 0 44px,#e77d77 44px 88px,#90c8ca 88px 132px);border-bottom:10px solid #d9956a;border-radius:0 0 30px 30px;box-shadow:0 12px 15px #3f234555}
+.shelf{position:absolute;width:100%;height:25px;left:0;background:linear-gradient(#f8b56a,#a95639);box-shadow:0 5px 0 #703d35;z-index:1}.shelf::before{content:'🍎 🍐 🍊 🍋 🍌';display:block;position:absolute;bottom:16px;letter-spacing:13px;font-size:34px;white-space:nowrap;filter:drop-shadow(0 4px 3px #42192c88)}
+.shelf.first{top:39%}.shelf.second{top:66%}.shelf.second:before{content:'🍓 🍎 🫐 🍊 🥝';font-size:30px}
+.lantern{position:absolute;z-index:2;top:105px;right:42px;font-size:49px;filter:drop-shadow(0 0 19px #ffd169)}
+.counter-wood{position:absolute;z-index:1;bottom:-1%;width:115%;left:-6%;height:24%;background:repeating-linear-gradient(0deg,transparent 0 33px,#804f37 34px 37px),linear-gradient(90deg,#c5824a,#ecb26a 44%,#a86139);border-top:20px solid #ffd39a;box-shadow:0 -8px 12px #3c244455;border-radius:18px}
+.shop .panda{position:absolute;z-index:3;width:245px;height:245px;left:50%;top:31%;transform:translateX(-50%);filter:drop-shadow(0 15px 13px #3f173b99)}
+.shop .shop-header{position:absolute;z-index:6;top:calc(14px + env(safe-area-inset-top));left:15px;right:15px;display:flex;gap:10px;align-items:center}
+.shop-name{flex:1;min-width:0;background:#fffffff4;border-radius:22px;padding:8px 12px;box-shadow:0 4px 13px #23154844}
+.shop-name strong{font-size:13px;display:block;line-height:1}.shop-name small{font-weight:800;color:#84769b;font-size:11px}
+.shop-name .bar{height:7px;margin-top:5px}
+.dialog{position:absolute;z-index:5;left:8%;right:8%;top:23%;background:#fff;border-radius:29px;padding:17px 15px;font-size:20px;font-weight:1000;text-align:center;box-shadow:0 7px 20px #401e4933;line-height:1.25}
+.dialog::after{content:'';position:absolute;bottom:-14px;left:62%;border:15px solid transparent;border-top-color:white;border-bottom:0}
+.story-bottom,.lesson-bottom{position:absolute;z-index:5;left:13px;right:13px;bottom:calc(19px + env(safe-area-inset-bottom))}
+.story-card{border-radius:27px;background:#fffdf5f5;padding:19px;box-shadow:var(--shadow);text-align:center}.story-card h2{font-size:25px;margin:5px 0 7px}.story-card p{font-size:14px;color:#555b8a;font-weight:800;line-height:1.35}.story-card .btn{margin-top:15px}
+.speak-panel{background:#fff;box-shadow:0 -7px 31px #1f164566;border-radius:32px 32px 21px 21px;padding:16px 18px 18px;text-align:center;position:relative}
+.speak-title{display:flex;align-items:center;justify-content:center;gap:7px;color:#7250c7;font-weight:1000;font-size:13px;margin-bottom:5px}
+.speak-prompt{font-size:20px;font-weight:1000;line-height:1.27;letter-spacing:-.02em;margin-bottom:11px}
+.fruits{display:flex;gap:7px;justify-content:center;margin:8px 0 9px}.fruit{width:31%;min-height:83px;background:linear-gradient(#fff,#fff3e9);border:2px solid #f4e3d7;border-radius:20px;font-weight:1000;font-size:12px;box-shadow:0 4px 0 #d5bda9;display:flex;flex-direction:column;align-items:center;justify-content:center}.fruit b{font-size:37px}.fruit.chosen{border-color:#8b5bf9;background:#f0e7ff;box-shadow:0 4px 0 #a284e4}.fruit.unavailable{opacity:.45;filter:grayscale(.9)}
+.mic{width:90px;height:90px;border-radius:50%;color:white;display:grid;place-items:center;margin:7px auto 4px;font-size:43px;background:radial-gradient(circle at 36% 25%,#69e5ff 0,#209efc 46%,#593df4 89%);border:7px solid #dfd5ff;box-shadow:0 6px 0 #7452ca,0 5px 25px #534ddd88;position:relative}
+.mic:before,.mic:after{content:'';position:absolute;border:2px solid #61baff;inset:-17px;border-radius:50%;animation:micwave 2s infinite;pointer-events:none}.mic:after{inset:-29px;animation-delay:.3s}
+.mic.listening{background:radial-gradient(circle,#ff72aa,#9e34e7);animation:pulse .9s infinite}
+.mic-caption{font-size:12px;font-weight:900;color:#576794;margin:6px 0 10px;min-height:17px}
+.utility{display:flex;gap:9px}.utility button{flex:1;min-height:43px;border-radius:16px;background:#edf2ff;color:#61529c;font-weight:1000;font-size:12px}
+.demo{font-size:11px;color:#817598;font-weight:800;margin-top:9px;text-decoration:underline;text-underline-offset:3px}
+.feedback{position:absolute;z-index:8;left:16px;right:16px;top:44%;padding:16px;text-align:center;background:#fffef1;border:3px solid #ffde63;border-radius:24px;box-shadow:0 10px 25px #41223077;animation:scaleIn .24s ease both}.feedback strong{display:block;font-size:22px}.feedback p{font-size:13px;margin:6px 0 12px}.feedback .btn{min-height:47px}
+.results{background:linear-gradient(180deg,#51338f 0,#774ed3 30%,#f3f8ff 31%);padding-bottom:18px}
+.results .result-hero{text-align:center;position:relative;padding:calc(27px + env(safe-area-inset-top)) 12px 13px;min-height:250px;overflow:hidden}
+.result-hero h1{color:white;font-size:36px;text-shadow:0 4px 0 #472789;margin-top:6px}
+.result-hero p{color:#fef0ff;font-weight:900;margin-top:6px}
+.result-hero .panda{height:143px;width:143px;filter:drop-shadow(0 8px 7px #20184e66);animation:bob 3s infinite}
+.result-star{position:absolute;font-size:48px;animation:float 2.6s infinite;filter:drop-shadow(0 5px 1px #d38006)}
+.result-body{background:#f3f8ff;border-radius:32px 32px 0 0;min-height:calc(100% - 240px);padding:20px 17px 35px;position:relative}
+.result-body h2{font-size:21px;margin:0 0 12px}.check-list{background:white;border-radius:23px;padding:10px 14px;box-shadow:0 6px 17px #4869a518}
+.check-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #edf1f9;padding:9px 0;font-size:13px;font-weight:900}.check-row:last-child{border-bottom:0}.check-row i{font-style:normal;font-size:22px}
+.reward{border-radius:24px;background:linear-gradient(100deg,#fff3ce,#f8e9ff);padding:13px 14px;display:flex;align-items:center;gap:11px;margin:14px 0 17px}.reward .rewardart{font-size:53px}.reward strong{font-size:17px}.reward small{display:block;color:#8579a1;font-weight:800}
+.results .btn{margin-bottom:10px}
+.choice{background:linear-gradient(#e8f6ff,#f4f8ff);padding-bottom:15px}
+.choice-head{text-align:center;padding:calc(16px + env(safe-area-inset-top)) 18px 8px}.choice-head h1{font-size:28px;margin:11px 0 4px}.choice-head p{font-size:13px;color:#6878a4;font-weight:900}
+.choice .pandy-inline{width:78px;height:78px;display:inline-block;vertical-align:middle}
+.choice .cards{padding:8px 19px 22px;display:flex;flex-direction:column;gap:10px}
+.choice-card{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 11px 8px 8px;border-radius:23px;background:white;box-shadow:0 5px 17px #425d9c1c;border:3px solid white;min-height:127px;transition:transform .16s,border-color .16s}
+.choice-card.active{border-color:#8c54fa;background:#f6efff;transform:scale(1.015);box-shadow:0 7px 18px #6945b44d}
+.choice-card .place-art{height:103px;width:112px;flex:none;border-radius:18px;overflow:hidden;position:relative;display:grid;place-items:center;font-size:56px;text-shadow:0 5px 4px #26436066}
+.place-art.forest{background:radial-gradient(circle at 75% 17%,#fff5c0 0 13%,transparent 14%),linear-gradient(#73c9ed 0 45%,#66c888 46%);box-shadow:inset 0 -20px 0 #3f936a}
+.place-art.mountain{background:linear-gradient(145deg,#a9e0fa,#d7dbff 50%,#a7caf0);box-shadow:inset 0 -16px #accce3}
+.place-art.oasis{background:radial-gradient(circle at 69% 22%,#fff09b 0 15%,transparent 16%),linear-gradient(#97e1f5 0 56%,#ebce88 57%)}
+.choice-card h3{font-size:17px;margin-bottom:6px}.choice-card p{font-size:12px;color:#667296;line-height:1.33;font-weight:800}.choice-radio{margin-left:auto;flex:none;width:20px;height:20px;border-radius:50%;border:2px solid #b5aad5;display:grid;place-items:center}.choice-card.active .choice-radio{border-color:#8b4df1;background:#8b4df1;color:white}
+.choice-footer{position:sticky;bottom:0;background:linear-gradient(transparent,#f4f8ff 15%);padding:11px 19px calc(17px + env(safe-area-inset-bottom))}
+.toast{position:absolute;z-index:30;bottom:100px;left:25px;right:25px;background:#221963ed;border-radius:18px;padding:14px 16px;text-align:center;color:white;font-size:13px;font-weight:900;box-shadow:0 7px 25px #26164270;animation:scaleIn .22s}
+.overlay-pause{z-index:22;position:absolute;inset:0;display:grid;place-items:center;background:#22144da8;backdrop-filter:blur(4px);padding:25px}.overlay-pause .pause-card{width:100%;border-radius:30px;background:#fff;text-align:center;padding:28px;box-shadow:var(--shadow)}.pause-card h2{font-size:27px;margin:7px 0}.pause-card p{font-size:13px;color:#7180a1;font-weight:800;margin:8px 0 23px}.pause-card .btn{margin:10px 0}.tiny{font-size:11px;color:#6c74a0;font-weight:800}
+@media(max-width:500px){#phone{height:100dvh;width:100vw;max-height:none;border-radius:0;box-shadow:none}.topbar{padding-top:calc(13px + env(safe-area-inset-top))}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<main id="phone" aria-label="Novakid Learning Adventures — мобильный интерактивный прототип"><div id="app"></div></main>
+<script>
+(function(){
+'use strict';
+var app=document.getElementById('app'),storageKey='novakid-adventures-v1',recognition=null,toastTimer=null;
+var initial={screen:'home',stars:120,completed:false,selected:null,stage:0,fruit:'banana',hintUsed:false,hintEver:false,pause:false,feedback:'',attempts:0,mode:'',heard:''};
+var state=Object.assign({},initial);
+try{var saved=JSON.parse(localStorage.getItem(storageKey)||'null');if(saved&&typeof saved==='object'){state=Object.assign({},initial,saved);if(!['home','map','mission','intro','lesson','results','choose'].includes(state.screen))state.screen='home'}}catch(e){}
+function save(){try{localStorage.setItem(storageKey,JSON.stringify(Object.assign({},state,{pause:false,feedback:'',mode:''})))}catch(e){}}
+function setScreen(screen){state.screen=screen;state.pause=false;state.feedback='';state.mode='';save();render()}
+function say(text){if(!('speechSynthesis' in window)){toast('Озвучивание недоступно в этом браузере');return}try{window.speechSynthesis.cancel();var msg=new SpeechSynthesisUtterance(text);msg.lang='en-US';msg.rate=.82;msg.pitch=1.12;window.speechSynthesis.speak(msg)}catch(e){toast('Не удалось воспроизвести звук')}}
+function panda(){return '<svg class="panda" viewBox="0 0 240 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Панда Pandy в волшебной шляпе"><defs><linearGradient id="cloak" x2="1" y2="1"><stop stop-color="#b471ff"/><stop offset="1" stop-color="#5b25c6"/></linearGradient><radialGradient id="fur"><stop stop-color="#fff"/><stop offset="1" stop-color="#dfddec"/></radialGradient></defs><ellipse cx="116" cy="217" rx="76" ry="23" fill="#3c2161" opacity=".24"/><path d="M60 195Q38 230 78 235H161Q200 221 170 193L160 154H80Z" fill="url(#cloak)" stroke="#4c2997" stroke-width="5"/><circle cx="59" cy="188" r="23" fill="#29263b"/><circle cx="181" cy="190" r="23" fill="#29263b"/><path d="M77 180Q43 152 28 174M160 181Q185 151 212 157" fill="none" stroke="#2c2947" stroke-width="27" stroke-linecap="round"/><circle cx="65" cy="80" r="28" fill="#303049"/><circle cx="173" cy="80" r="28" fill="#303049"/><circle cx="66" cy="81" r="13" fill="#88658c"/><circle cx="171" cy="81" r="13" fill="#88658c"/><ellipse cx="119" cy="121" rx="77" ry="72" fill="url(#fur)" stroke="#e9e4f4" stroke-width="3"/><ellipse cx="91" cy="131" rx="24" ry="31" transform="rotate(18 91 131)" fill="#303045"/><ellipse cx="149" cy="131" rx="24" ry="31" transform="rotate(-18 149 131)" fill="#303045"/><ellipse cx="94" cy="127" rx="12" ry="17" fill="white"/><ellipse cx="146" cy="127" rx="12" ry="17" fill="white"/><circle cx="98" cy="131" r="8" fill="#573624"/><circle cx="146" cy="131" r="8" fill="#573624"/><circle cx="101" cy="125" r="4" fill="white"/><circle cx="149" cy="125" r="4" fill="white"/><ellipse cx="122" cy="155" rx="13" ry="10" fill="#282139"/><path d="M106 167Q120 187 138 166Q125 197 106 167" fill="#7e2543"/><ellipse cx="121" cy="179" rx="8" ry="5" fill="#ff8595"/><ellipse cx="67" cy="160" rx="12" ry="7" fill="#ffb2bf" opacity=".8"/><ellipse cx="171" cy="160" rx="12" ry="7" fill="#ffb2bf" opacity=".8"/><path d="M44 93Q66 7 119 0Q164 -6 195 88Q113 71 44 93" fill="url(#cloak)" stroke="#4923a4" stroke-width="5"/><path d="M68 59Q80 34 89 28Q106 48 130 46L141 20Q162 41 171 72" fill="none" stroke="#d4a9ff" stroke-width="6" opacity=".65"/><ellipse cx="118" cy="89" rx="96" ry="20" fill="url(#cloak)" stroke="#4824a6" stroke-width="5"/><path d="M40 88Q109 108 193 85" fill="none" stroke="#dba9ff" stroke-width="6"/><path d="M105 32l5 10 12 2-9 8 3 12-11-6-10 5 3-12-9-8 12-1Z" fill="#ffde46" stroke="#edab20" stroke-width="2"/><path d="M157 68l3 5 6 1-5 5 2 7-6-4-6 3 2-7-5-4 7-1Z" fill="#ffda48"/><path d="M89 208l6 13 14 2-11 10 3 15-12-7-13 7 3-15-11-10 15-2Z" fill="#ffde54" stroke="#e69d1c" stroke-width="3"/></svg>'}
+function mapArt(){
+var svg='<svg class="map-art" viewBox="0 0 420 1500" preserveAspectRatio="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grass" x2="0" y2="1"><stop stop-color="#b4eec5"/><stop offset=".32" stop-color="#66c895"/><stop offset="1" stop-color="#57a973"/></linearGradient><linearGradient id="river" x2="1" y2="1"><stop stop-color="#83f6ff"/><stop offset="1" stop-color="#199bcf"/></linearGradient><filter id="shadow"><feGaussianBlur stdDeviation="5"/></filter></defs><rect width="420" height="1500" fill="url(#grass)"/><path d="M-50 45Q50 -35 155 33T425 30L460 0V300Q348 235 254 299Q123 330 -45 265Z" fill="#cae6e9" opacity=".46"/><path d="M-30 300Q79 245 157 285T430 270V450Q255 403 155 453T-20 440Z" fill="#83d9a6" opacity=".4"/><path d="M-40 955Q85 895 173 948T449 900V1130Q321 1050 216 1121T-30 1100Z" fill="#4bad72" opacity=".4"/><path d="M-30 1100Q100 995 188 1109T435 1180" stroke="#3276a1" stroke-width="100" fill="none" opacity=".24" filter="url(#shadow)"/><path d="M-30 1100Q100 995 188 1109T435 1180" stroke="url(#river)" stroke-width="78" fill="none"/><path d="M-30 1100Q100 995 188 1109T435 1180" stroke="#d1ffff" stroke-width="6" fill="none" stroke-dasharray="24 40" opacity=".75"/><path d="M100 1450C45 1355 159 1293 112 1190S310 1035 227 930S110 788 237 667S150 530 206 420S190 320 245 267" stroke="#458153" stroke-width="29" opacity=".37" fill="none"/><path d="M100 1450C45 1355 159 1293 112 1190S310 1035 227 930S110 788 237 667S150 530 206 420S190 320 245 267" stroke="#fce6a9" stroke-width="20" fill="none" stroke-linecap="round"/><path d="M100 1450C45 1355 159 1293 112 1190S310 1035 227 930S110 788 237 667S150 530 206 420S190 320 245 267" stroke="#fffaf1" stroke-width="4" fill="none" stroke-dasharray="8 23" stroke-linecap="round"/><path d="M245 267Q130 224 95 146M245 267Q280 154 257 91M245 267Q355 237 348 145" stroke="#fff0bc" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="15 13"/>';
+var rnd=42;function rand(){rnd=(rnd*1664525+1013904223)>>>0;return rnd/4294967296}
+for(var i=0;i<185;i++){var x=8+rand()*405,y=55+rand()*1390,r=7+rand()*13; if((x>125&&x<280&&y>620&&y<870)||(x>80&&x<340&&y>1040&&y<1220))continue;var type=rand();if(type<.65){svg+='<g opacity="'+(.8+rand()*.2).toFixed(2)+'"><ellipse cx="'+(x+4).toFixed(1)+'" cy="'+(y+r).toFixed(1)+'" rx="'+(r*.7).toFixed(1)+'" ry="'+(r*.3).toFixed(1)+'" fill="#20704c" opacity=".34"/><path d="M'+x.toFixed(1)+' '+(y-r*2.1).toFixed(1)+'l'+(-r*.8).toFixed(1)+' '+(r*1.7).toFixed(1)+'h'+(r*.55).toFixed(1)+'l'+(-r*.63).toFixed(1)+' '+(r*.8).toFixed(1)+'h'+(r*1.75).toFixed(1)+'l'+(-r*.6).toFixed(1)+' '+(-r*.8).toFixed(1)+'h'+(r*.5).toFixed(1)+'Z" fill="'+(rand()>.5?'#178a69':'#1d9e68')+'" stroke="#257c51" stroke-width="1.5"/></g>'}else{svg+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="'+(rand()>.5?'#64c96b':'#2d9d68')+'" stroke="#3d9863" stroke-width="3"/><circle cx="'+(x-r*.3).toFixed(1)+'" cy="'+(y-r*.4).toFixed(1)+'" r="'+(r*.4).toFixed(1)+'" fill="#9ae797" opacity=".7"/>'}}
+for(var j=0;j<95;j++){var fx=rand()*420,fy=rand()*1500;svg+='<circle cx="'+fx.toFixed(1)+'" cy="'+fy.toFixed(1)+'" r="'+(2+rand()*3).toFixed(1)+'" fill="'+(['#f9d450','#f6aadd','#e9f8ff','#f6b39b'][j%4])+'" opacity=".88"/>'}
+svg+='<g transform="translate(191 1061) rotate(-19)"><rect x="-27" y="-16" width="54" height="34" rx="4" fill="#8e5937" stroke="#583e30" stroke-width="5"/><path d="M-26 -10H26M-26 0H26M-26 10H26" stroke="#e8a65e" stroke-width="5"/></g></svg>';return svg}
+function nav(active){return '<nav class="nav" aria-label="Навигация"><button data-action="home" class="'+(active==='home'?'active':'')+'"><span>⌂</span>Главная</button><button data-action="map" class="'+(active==='map'?'active':'')+'"><span>🗺️</span>Карта</button><button data-action="prizes" class="'+(active==='prizes'?'active':'')+'"><span>⭐</span>Награды</button><button data-action="profile" class="'+(active==='profile'?'active':'')+'"><span>👦</span>Герой</button></nav>'}
+function counter(){return '<span class="pill counter"><span class="star">⭐</span>'+state.stars+'</span>'}
+function home(){return '<section class="screen home"><div class="screen-scroll"><header class="topbar"><div class="brand">Nova<em>kid</em><span style="font-size:15px;color:#9e8ada"> ✦</span></div><div class="top-actions">'+counter()+'<span class="avatar">👦</span></div></header><div class="home-main"><p class="greeting">Привет, Алекс! 👋 Готов к приключению?</p><div class="hero"><div class="hero-glow"></div><span class="hero-stars" style="top:19px;right:24px">✦</span><span class="hero-stars" style="top:174px;right:4px;animation-delay:.8s">⭐</span>'+panda()+'<div class="hero-content"><div class="kicker">Твоё новое приключение</div><h1>Волшебный<br>магазин</h1><div class="hero-desc">Помоги Pandy научиться делать покупки!</div><button class="btn yellow" data-action="map">▶ На карту приключений</button></div></div><div class="section-title"><h2>Мой маршрут</h2><span>3 шага →</span></div><div class="path-cards"><div class="path-card"><div class="step-bubble">✓</div><div class="art">📖</div>Учимся</div><div class="path-card"><div class="step-bubble">2</div><div class="art">🎮</div>Играем</div><div class="path-card"><div class="step-bubble">3</div><div class="art">🎁</div>Награда</div></div><div class="daily"><span style="font-size:35px">🎯</span><div><span style="font-weight:900;color:#61739e">Твоя цель сегодня</span><strong>Попроси товар по-английски</strong></div></div><button class="btn purple small" data-action="map">Открыть мой сказочный мир 🗺️</button></div></div>'+nav('home')+'</section>'}
+function point(top,left,emoji,label,kind,action,pin){return '<button class="map-point '+(kind||'')+'" style="top:'+top+'px;left:'+left+'%" data-action="'+action+'" aria-label="'+label+'"><span class="point-label">'+label+'</span><span class="building">'+emoji+'</span><span class="pin">'+pin+'</span></button>'}
+function mapScreen(modal){var done=state.completed;var pts=point(1250,20,'🏡','Первые слова','done','done','✓')+point(1030,72,'🌳','Лесная поляна','done','done','✓')+point(812,27,'🧺','Задания','done','done','✓')+point(627,62,'🏪','Волшебный магазин',done?'done':'current',done?'results':'mission',done?'✓':'★');
+pts+=done?point(355,53,'🪄','Развилка','done','choice','◆')+point(128,18,'🌲','Лесной ручей',state.selected==='forest'?'current':'locked','branch-forest',state.selected==='forest'?'★':'?')+point(92,61,'🏡','Домик в горах',state.selected==='mountain'?'current':'locked','branch-mountain',state.selected==='mountain'?'★':'?')+point(275,85,'🌴','Оазис',state.selected==='oasis'?'current':'locked','branch-oasis',state.selected==='oasis'?'★':'?'):point(283,55,'🏰','Скоро новая зона','locked','locked','🔒');
+var hud='<div class="map-hud"><div class="row"><button class="iconbtn" data-action="home" aria-label="На главную">←</button><div class="pill" style="font-size:13px">🧒 Алекс</div>'+counter()+'</div><div class="hud-card"><div class="muted">МОЁ ПРИКЛЮЧЕНИЕ · SHOPPING</div><h3>'+(done?'Волшебный магазин пройден!':'Научись покупать продукты')+'</h3><div class="bar"><i style="width:'+(done?100:67)+'%"></i></div><div class="tiny" style="margin-top:5px">'+(done?'3 из 3 миссий':'2 из 3 миссий')+'</div></div></div>';
+var cta=done?(state.selected?'▶ Начать новую миссию':'🧭 Выбрать новый путь'):'▶ Начать миссию';var action=done?(state.selected?'next':'choice'):'mission';
+var base='<section class="screen map-page"><div class="map-scroll" id="mapscroll"><div class="map-surface">'+mapArt()+pts+'</div></div>'+hud+'<div class="map-bottom"><div class="caption">'+(done?(state.selected?'Твой новый путь открыт! ✨':'Куда отправимся дальше? ✨'):'✨ Нажми на сияющий магазин')+'</div><button class="btn yellow" data-action="'+action+'">'+cta+'</button></div>'+nav('map')+'</section>';
+if(modal){base+='<div class="backdrop" data-action="closemission"></div><div class="modal-wrap"><div class="modal"><button class="iconbtn close" data-action="closemission">✕</button>'+panda()+'<div class="tiny">МИССИЯ 3 ИЗ 3 · SHOPPING</div><h2>🛍️ Волшебный магазин</h2><p style="color:#626b9b;font-weight:800;line-height:1.4">Помоги Pandy выбрать покупки!<br>Научись просить товары по-английски.</p><div style="display:flex;justify-content:center;gap:16px;margin:19px 0 7px;font-weight:1000;font-size:13px"><span>⏱ 5–7 минут</span><span>⭐ +15 звёзд</span></div><button class="btn purple" data-action="start">Начать миссию ▶</button><small>🎤 Разговорная практика</small></div></div>'}return base}
+function shopSet(){return '<div class="shop-set"><div class="awning"></div><div class="lantern">🏮</div><div class="shelf first"></div><div class="shelf second"></div><div class="counter-wood"></div></div>'+panda()}
+function shopHeader(stage){return '<header class="shop-header"><button class="iconbtn" data-action="backshop" aria-label="Назад">←</button><div class="shop-name"><strong>🏪 Волшебный магазин</strong><small>Шаг '+stage+' из 3</small><div class="bar"><i style="width:'+(stage*33.33)+'%"></i></div></div><button class="iconbtn" data-action="pause" aria-label="Пауза">Ⅱ</button></header>'}
+function intro(){return '<section class="screen shop">'+shopSet()+shopHeader(1)+'<div class="dialog">Welcome to my<br>magic shop! <button data-action="welcome" aria-label="Прослушать" style="font-size:22px">🔊</button></div><div class="story-bottom"><div class="story-card"><div class="tiny">НОВАЯ ИСТОРИЯ ✨</div><h2>Магия покупок!</h2><p>Pandy ждёт тебя в магазине. Помоги ему: попроси яблоко на английском!</p><button class="btn purple" data-action="lesson">Начать приключение ▶</button></div></div></section>'}
+function lesson(){var step=state.stage,ask=step===0?'I would like an apple, please.':step===1?'What would you like?':'Sorry, we have no apples today!',title=step===0?'Слушай и повторяй':step===1?'Попроси яблоко!':'Яблоки закончились!',help=step===0?'Повтори фразу за Pandy':step===1?'Скажи просьбу самостоятельно':'Попроси другой фрукт',options=step===0?'<div class="fruits"><button class="fruit chosen" data-action="apple"><b>🍎</b>apple</button></div>':step===1?'<div class="fruits"><button class="fruit chosen" data-action="apple"><b>🍎</b>apple</button><button class="fruit" data-action="fruit-banana"><b>🍌</b>banana</button><button class="fruit" data-action="fruit-orange"><b>🍊</b>orange</button></div>':'<div class="fruits"><button class="fruit unavailable" disabled><b>🍎</b>нет в наличии</button><button class="fruit '+(state.fruit==='banana'?'chosen':'')+'" data-action="fruit-banana"><b>🍌</b>banana</button><button class="fruit '+(state.fruit==='orange'?'chosen':'')+'" data-action="fruit-orange"><b>🍊</b>orange</button></div>';
+var panel='<div class="lesson-bottom"><div class="speak-panel"><div class="speak-title">✦ Шаг '+(step+1)+' из 3 · '+(['С поддержкой','Самостоятельно','Новая ситуация'][step])+'</div><div class="speak-prompt">'+title+'</div>'+options+(step===0?'<p style="font-size:13px;font-weight:900;color:#5145a4">I would like an apple, please.</p>':'')+'<button class="mic '+(state.mode==='listening'?'listening':'')+'" data-action="mic" aria-label="Произнести ответ">🎙</button><div class="mic-caption">'+(state.mode==='listening'?'Слушаю тебя…':state.heard?'Услышал: '+escapeHtml(state.heard):help)+'</div><div class="utility"><button data-action="hint">💡 Подсказка</button><button data-action="repeat">🔊 Послушать</button></div><button class="demo" data-action="demo">▶ Продолжить в деморежиме без микрофона</button></div></div>';
+var feedback=state.feedback?'<div class="feedback"><strong>'+escapeHtml(state.feedback)+'</strong><p>'+(state.feedback.startsWith('Здорово')?'Pandy получил твою просьбу! ✨':'Попробуй ещё раз — у тебя получится!')+'</p><button class="btn purple small" data-action="feedbacknext">Дальше →</button></div>':'';
+return '<section class="screen shop">'+shopSet()+shopHeader(step+1)+'<div class="dialog">'+escapeHtml(ask)+' <button data-action="repeat" aria-label="Озвучить" style="font-size:21px">🔊</button></div>'+panel+feedback+'</section>'}
+function results(){return '<section class="screen results"><div class="screen-scroll"><div class="result-hero"><span class="result-star" style="left:27px;top:89px">⭐</span><span class="result-star" style="right:24px;top:58px;animation-delay:.5s">🌟</span>'+panda()+'<h1>Миссия пройдена!</h1><p>Ты справился, Алекс! 🎉</p></div><div class="result-body"><h2>Чему ты научился?</h2><div class="check-list"><div class="check-row"><i>✅</i>Повторил новую фразу</div><div class="check-row"><i>✅</i>'+(state.hintEver?'Попросил товар с помощью Pandy':'Сам попросил товар')+'</div><div class="check-row"><i>✅</i>Нашёл выход из новой ситуации</div></div><h2 style="margin:18px 0 9px">Твоя награда 🎁</h2><div class="reward"><div class="rewardart">🪔</div><div><strong>+15 ⭐ и магическая лампа</strong><small>Новый предмет для твоего мира</small></div></div><button class="btn yellow" data-action="choice">Выбрать приключение →</button><button class="btn ghost small" data-action="map">Вернуться на карту</button></div></div></section>'}
+var branches={forest:{title:'Лесной ручей',emoji:'🌲',desc:'Помоги белочке устроить пикник. Попроси ягоды!',cls:'forest'},mountain:{title:'Домик в горах',emoji:'🏡',desc:'Загляни к медвежонку. Попроси тёплый чай!',cls:'mountain'},oasis:{title:'Оазис путешественников',emoji:'🌴',desc:'Найди волшебное кафе и попроси прохладную воду!',cls:'oasis'}};
+function choose(){var cards='';Object.keys(branches).forEach(function(k){var b=branches[k];cards+='<button class="choice-card '+(state.selected===k?'active':'')+'" data-action="pick-'+k+'" aria-pressed="'+(state.selected===k)+'"><div class="place-art '+b.cls+'">'+b.emoji+'</div><div style="flex:1"><h3>'+b.title+'</h3><p>'+b.desc+'</p></div><span class="choice-radio">'+(state.selected===k?'✓':'')+'</span></button>'});return '<section class="screen choice"><div class="screen-scroll"><div class="choice-head"><button class="iconbtn" data-action="results" style="position:absolute;top:calc(17px + env(safe-area-inset-top));left:18px">←</button><span class="pill" style="position:absolute;right:18px;top:calc(17px + env(safe-area-inset-top))">⭐ '+state.stars+'</span><div style="height:12px"></div>'+panda().replace('class="panda"','class="pandy-inline"')+'<h1>Куда отправимся?</h1><p>Выбери приключение, которое нравится тебе!</p></div><div class="cards">'+cards+'</div><div class="choice-footer"><button class="btn purple" data-action="confirm" '+(!state.selected?'disabled':'')+'>Выбрать этот путь →</button><p class="tiny" style="text-align:center;margin-top:10px">Все три пути помогают практиковать английский</p></div></div></section>'}
+function pause(){return '<div class="overlay-pause"><div class="pause-card"><div style="font-size:60px">⏸️</div><h2>Перерыв!</h2><p>Отдохни немного. Pandy подождёт тебя в магазине.</p><button class="btn purple" data-action="resume">Продолжить ▶</button><button class="btn ghost" data-action="map">На карту</button></div></div>'}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function render(){var html=state.screen==='home'?home():state.screen==='map'?mapScreen(false):state.screen==='mission'?mapScreen(true):state.screen==='intro'?intro():state.screen==='lesson'?lesson():state.screen==='results'?results():state.screen==='choose'?choose():home();app.innerHTML=html+(state.pause?pause():'');if(state.screen==='map'||state.screen==='mission'){var m=document.getElementById('mapscroll');if(m)m.scrollTop=(state.completed&&state.selected)?0:(state.completed?140:395)}}
+function toast(s){var t=document.createElement('div');t.className='toast';t.textContent=s;app.querySelectorAll('.toast').forEach(function(n){n.remove()});app.appendChild(t);clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.remove()},2600)}
+function finishStage(){if(state.feedback)return;state.mode='';state.feedback='Здорово! У тебя получилось!';save();render()}
+function nextStage(){state.feedback='';state.heard='';state.mode='';state.attempts=0;state.hintUsed=false;if(state.stage<2){state.stage++;setScreen('lesson')}else{if(!state.completed){state.completed=true;state.stars+=15}setScreen('results')}}
+function demoAdvance(){state.mode='demo';state.heard='Демонстрационный ответ';finishStage()}
+function errorAnswer(){state.attempts++;state.heard='';state.mode='';toast(state.attempts>1?'Можно воспользоваться подсказкой 💡':'Попробуй ещё раз! Ты справишься 🌟');render()}
+function startMic(){var Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;if(!Recognition){toast('Распознавание недоступно. Используй деморежим ниже.');return}
+try{if(recognition)recognition.abort();recognition=new Recognition();recognition.lang='en-US';recognition.interimResults=false;recognition.maxAlternatives=3;var target=state.stage===2?state.fruit:'apple';state.mode='listening';state.heard='';render();recognition.onresult=function(e){var variants=Array.from(e.results[0]).map(function(x){return x.transcript.toLowerCase()});var best=variants[0]||'';state.heard=best;var match=variants.some(function(s){return s.includes(target)&&(/would like|i like|like a|like an|i'd like|want/.test(s))});state.mode='';if(match){finishStage()}else{errorAnswer()}};recognition.onerror=function(e){state.mode='';render();toast(e.error==='not-allowed'?'Разреши доступ к микрофону или выбери деморежим':'Не удалось распознать речь. Попробуй ещё раз')};recognition.onend=function(){if(state.mode==='listening'){state.mode='';render()}};recognition.start()}catch(e){state.mode='';render();toast('Микрофон недоступен. Используй деморежим.')}}
+app.addEventListener('click',function(e){var b=e.target.closest('[data-action]');if(!b||b.disabled)return;var a=b.getAttribute('data-action');
+if(a==='home'){setScreen('home');return}
+if(a==='map'){if(recognition)try{recognition.abort()}catch(x){}setScreen('map');return}
+if(a==='mission'){setScreen('mission');return}
+if(a==='closemission'){setScreen('map');return}
+if(a==='start'){state.stage=0;state.hintUsed=false;state.hintEver=false;state.attempts=0;state.heard='';setScreen('intro');return}
+if(a==='lesson'){state.stage=0;setScreen('lesson');return}
+if(a==='backshop'){setScreen(state.screen==='intro'?'map':'intro');return}
+if(a==='pause'){state.pause=true;render();return}
+if(a==='resume'){state.pause=false;render();return}
+if(a==='mic'){startMic();return}
+if(a==='demo'){demoAdvance();return}
+if(a==='feedbacknext'){nextStage();return}
+if(a==='repeat'){say(state.stage===0?'I would like an apple, please.':state.stage===1?'What would you like?':'Sorry, we have no apples today!');return}
+if(a==='welcome'){say('Welcome to my magic shop!');return}
+if(a==='hint'){state.hintUsed=true;state.hintEver=true;toast(state.stage===0?'Скажи: I would like an apple, please.':state.stage===1?'Начни так: I would like an…':'Начни так: I would like a '+state.fruit+', please.');save();return}
+if(a==='fruit-banana'||a==='fruit-orange'){if(state.stage===1){toast('Сейчас попроси яблоко 🍎');return}state.fruit=a.slice(6);state.heard='';render();return}
+if(a==='apple'){if(state.stage===1)toast('Отличный выбор! Теперь попроси его 🎤');return}
+if(a==='results'){setScreen('results');return}
+if(a==='choice'){setScreen('choose');return}
+if(a.startsWith('pick-')){state.selected=a.slice(5);save();render();return}
+if(a==='confirm'){if(!state.selected){toast('Сначала выбери приключение');return}setScreen('map');return}
+if(a==='next'){toast('Этот маршрут открыт! Следующая миссия появится в следующей версии.');return}
+if(a.startsWith('branch-')){var k=a.slice(7);if(!state.completed){toast('Сначала пройди Волшебный магазин');return}if(state.selected===k)toast('Ты выбрал: '+branches[k].title);else setScreen('choose');return}
+if(a==='done'){toast('Эта миссия уже пройдена ✓');return}
+if(a==='locked'){toast('Эта зона пока закрыта 🔒');return}
+if(a==='prizes'){toast('Твои награды: '+state.stars+' звёзд'+(state.completed?' и магическая лампа 🪔':'')+'!');return}
+if(a==='profile'){toast('Герой Алекс · уровень Pre-A1/A1');return}
+});
+var touchStartX=null;app.addEventListener('touchstart',function(e){if(state.screen==='map'&&e.touches[0])touchStartX=e.touches[0].clientX},{passive:true});
+window.NovakidDemo={reset:function(){state=Object.assign({},initial);save();render()},getState:function(){return Object.assign({},state)}};
+render();
+})();
+</script>
+</body></html>
