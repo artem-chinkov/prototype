@@ -36,7 +36,7 @@ let nodes=mapNode(21,1308,'home','Мой дом',A.house('home'),'nav-room')+
 mapNode(71,1181,'learn','Первый урок',A.item('picture'),'done','done')+
 mapNode(33,991,'learn','Знакомимся',A.item('plant'),'done','done')+
 mapNode(61,799,'learn','Magic Shop',A.house('shop'),done?'learningResult':'mission',done?'done':'current')+
-mapNode(26,638,'game','Fruit Rush',A.fruit('banana'),'gameNode',game?'current':'locked')+
+mapNode(26,638,'game','Fruit Rush',A.fruit('banana'),'gameNode',s.gamePlayed?'done':game?'current':'locked')+
 mapNode(55,449,'learn','Следующий путь',A.item('plant'),s.story?'storyResult':'storyChoose',story?'current':'locked')+
 mapNode(18,137,'learn','Лесной ручей',A.item('plant'),'branch-forest',s.story==='forest'?'current':'locked')+
 mapNode(60,108,'learn','Домик в горах',A.house('home'),'branch-mountain',s.story==='mountain'?'current':'locked')+
@@ -85,7 +85,8 @@ function listen(){if(s.recording){try{recognition&&recognition.stop()}catch(e){}
 function finishGame(win){
 if(!game)return;let score=game.score,caught=game.caught;stopGame();let newBest=score>s.gameBest;if(newBest)s.gameBest=score;
 let daily=0,item=false;
-if(win){s.gamePlayed=true;if(s.lastDailyReward!==dayKey()){s.lastDailyReward=dayKey();s.stars+=5;daily=5}if(!s.owned.includes('lamp')){s.owned.push('lamp');item=true}}
+s.gamePlayed=true;
+if(win){if(s.lastDailyReward!==dayKey()){s.lastDailyReward=dayKey();s.stars+=5;daily=5}if(!s.owned.includes('lamp')){s.owned.push('lamp');item=true}}
 s.lastGame={score,caught,win,newBest,daily,item};
 persist();go('gameResult')
 }
